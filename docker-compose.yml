@@ -1,0 +1,38 @@
+version: '3.7'
+
+services:
+    api_model:
+        image: ryaboman/api_model:v04
+        container_name: myAPI
+        restart: unless-stopped
+        depends_on:
+            - db
+        expose:
+            - "5000"
+        ports:
+          - "5000:5000"
+        networks:
+          - appnet
+
+
+    db:
+        image: postgres:16rc1-bookworm
+        container_name: myDB
+        restart: always
+        environment:
+          POSTGRES_PASSWORD: 123456
+          POSTGRES_USER: radio
+          POSTGRES_DB: first
+          POSTGRES_INITDB_ARGS: "-A md5"
+        expose:
+          - "5432"
+        ports:
+          - "5432:5432"
+        networks:
+          - appnet
+
+networks:
+  appnet:
+    driver: bridge
+    name: appnet
+
